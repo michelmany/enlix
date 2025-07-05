@@ -9,13 +9,17 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  slug      String   @unique
-  template  String // "lumi" | "noir" | "sage"
-  content   String // JSON string
-  role      String   @default("client") // "client" | "admin"
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String    @id @default(cuid())
+  email             String    @unique
+  name              String
+  slug              String    @unique
+  role              String    @default("client") // "client" | "admin"
+  template          String // "lumi" | "noir" | "sage"
+  content           String // JSON string
+  plan              String    @default("free")
+  trialEndsAt       DateTime?
+  hasCustomTemplate Boolean   @default(false)
+  customDomain      String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }

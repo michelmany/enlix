@@ -1,26 +1,63 @@
-import {NextRequest, NextResponse} from 'next/server'
+import {
+  clerkMiddleware,
+  createRouteMatcher
+} from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 
-export function middleware(request: NextRequest) {
-    const {pathname} = request.nextUrl
+const isPublicRoute = createRouteMatcher([
+  '/',
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/api/webhooks(.*)',
+  '/:slug'
+]);
 
-    // Protect dashboard routes
-    if (pathname.startsWith('/dashboard')) {
-        // Add your authentication logic here
-        // For now, we'll allow all requests
-        // In production, check for valid session/JWT
-        return NextResponse.next()
+const isProtectedRoute = createRouteMatcher([
+  '/admin(.*)',
+  '/dashboard(.*)'
+]);
+
+const isAdminRoute = createRouteMatcher([
+  '/admin(.*)',
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  // First check if it's a protected route (override slug pattern)
+  if (isProtectedRoute(req)) {
+    // Check authentication for protected routes
+    const session = await auth();
+
+    // If not authenticated, redirect to sign-in
+    if (!session.userId) {
+      const signInUrl = new URL('/sign-in', req.url);
+      return NextResponse.redirect(signInUrl);
     }
 
-    // Protect admin routes
-    if (pathname.startsWith('/admin')) {
-        // Add your admin authentication logic here
-        // Check if user has admin role
-        return NextResponse.next()
+    // If it's an admin route, check for admin role
+    if (isAdminRoute(req)) {
+      if (session.orgRole !== 'admin') {
+        const dashboardUrl = new URL('/dashboard', req.url);
+        return NextResponse.redirect(dashboardUrl);
+      }
     }
+  }
+  // If the route is public, allow access
+  else if (isPublicRoute(req)) {
+    return NextResponse.next();
+  }
+  // Any other routes not explicitly public require authentication
+  else {
+    const session = await auth();
+    if (!session.userId) {
+      const signInUrl = new URL('/sign-in', req.url);
+      return NextResponse.redirect(signInUrl);
+    }
+  }
 
-    return NextResponse.next()
-}
+  // Allow access to the route
+  return NextResponse.next();
+});
 
 export const config = {
-    matcher: ['/dashboard/:path*', '/admin/:path*']
-}
+  matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+};
