@@ -129,3 +129,5 @@ pids
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+.idea
