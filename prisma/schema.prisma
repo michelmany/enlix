@@ -1,0 +1,21 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  slug      String   @unique
+  template  String // "lumi" | "noir" | "sage"
+  content   String // JSON string
+  role      String   @default("client") // "client" | "admin"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

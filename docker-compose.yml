@@ -1,0 +1,32 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=file:./dev.db
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=your-secret-key-here
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+    volumes:
+      - ./prisma:/app/prisma
+      - db_data:/app/prisma
+    depends_on:
+      - setup
+
+  setup:
+    build: .
+    command: >
+      sh -c "npx prisma db push && 
+             npm run db:seed"
+    environment:
+      - DATABASE_URL=file:./dev.db
+    volumes:
+      - ./prisma:/app/prisma
+      - db_data:/app/prisma
+
+volumes:
+  db_data:
