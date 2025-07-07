@@ -1,6 +1,6 @@
-import {TemplateProps} from '@/types/template'
+import {TemplateProps} from '@/types'
 
-export default function SageTemplate({content}: TemplateProps) {
+export default function SageTemplate({content, children}: TemplateProps) {
     return (
         <div className="min-h-screen bg-green-50">
             <div className="container mx-auto px-4 py-16">
@@ -38,6 +38,10 @@ export default function SageTemplate({content}: TemplateProps) {
                             ))}
                         </div>
                     )}
+
+                    <div className="col-span-2 mt-12">
+                        {children}
+                    </div>
                 </main>
             </div>
         </div>

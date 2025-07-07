@@ -1,6 +1,6 @@
-import {TemplateProps} from '@/types/template'
+import {TemplateProps} from '@/types'
 
-export default function NoirTemplate({content}: TemplateProps) {
+export default function NoirTemplate({content, children}: TemplateProps) {
     return (
         <div className="min-h-screen bg-black text-white">
             <div className="container mx-auto px-4 py-16">
@@ -40,6 +40,9 @@ export default function NoirTemplate({content}: TemplateProps) {
                                 className="w-full h-48 object-cover grayscale"
                             />
                         </div>
+                    </div>
+                    <div className="col-span-2 mt-12">
+                        {children}
                     </div>
                 </main>
             </div>

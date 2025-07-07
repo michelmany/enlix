@@ -1,4 +1,4 @@
-import {prisma} from './prisma';
+import {prisma} from '@/lib/db/prisma';
 
 export async function generateUniqueSlug(email: string): Promise<string> {
     // Extract the part of the email before the "@" symbol

@@ -9,17 +9,30 @@ datasource db {
 }
 
 model User {
-  id                String    @id @default(cuid())
-  email             String    @unique
-  name              String
-  slug              String    @unique
-  role              String    @default("client") // "client" | "admin"
-  template          String // "lumi" | "noir" | "sage"
-  content           String // JSON string
-  plan              String    @default("free")
-  trialEndsAt       DateTime?
-  hasCustomTemplate Boolean   @default(false)
+  id          String    @id @default(cuid())
+  email       String    @unique
+  name        String
+  slug        String    @unique // Keep this for URL routing (example.com/johndoe)
+  role        String    @default("client")
+  plan        String    @default("free")
+  trialEndsAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  page Page?
+}
+
+model Page {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  template          String
+  content           String
+  hasCustomTemplate Boolean  @default(false)
   customDomain      String?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
 }

@@ -1,7 +1,7 @@
-import {db} from '@/lib/db'
+import {prisma} from '@/lib/db/prisma'
 
 export default async function AdminPanel() {
-    const users = await db.user.findMany({
+    const users = await prisma.user.findMany({
         orderBy: {createdAt: 'desc'}
     })
 

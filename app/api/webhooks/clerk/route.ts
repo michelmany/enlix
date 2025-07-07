@@ -2,8 +2,8 @@ import {Webhook} from 'svix';
 import {headers} from 'next/headers';
 import {WebhookEvent} from '@clerk/nextjs/server';
 import {NextResponse} from 'next/server';
-import {prisma} from '@/lib/prisma';
-import {generateUniqueSlug} from '@/lib/user-utils';
+import {prisma} from '@/lib/db/prisma';
+import {generateUniqueSlug} from '@/utils/user-utils';
 import {
     DEFAULT_TEMPLATE,
     DEFAULT_ROLE,
@@ -72,13 +72,17 @@ export async function POST(req: Request) {
                     email: primaryEmail.email_address,
                     name: first_name || DEFAULT_USER_NAME,
                     slug,
-                    template: DEFAULT_TEMPLATE,
-                    content: JSON.stringify({}), // Empty content to start
                     role: DEFAULT_ROLE,
                     plan: 'pro', // Start with pro trial
                     trialEndsAt,
-                    hasCustomTemplate: false,
-                    customDomain: null,
+                    page: {
+                        create: {
+                            template: DEFAULT_TEMPLATE,
+                            content: JSON.stringify({}), // Empty content to start
+                            hasCustomTemplate: false,
+                            customDomain: null,
+                        }
+                    }
                 },
             });
 

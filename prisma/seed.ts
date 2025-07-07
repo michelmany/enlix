@@ -1,7 +1,6 @@
-// prisma/seed.ts
 import {PrismaClient} from '@prisma/client'
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
     const sampleContent = {
@@ -9,6 +8,18 @@ async function main() {
         subtitle: "This is a sample subtitle",
         description: "This is a sample description for the page content.",
         image: "/placeholder.jpg",
+        sections: [
+            {
+                id: "section1",
+                type: "about",
+                enabled: true,
+                order: 0,
+                data: {
+                    title: "About Me",
+                    content: "This is some sample content about me."
+                }
+            }
+        ],
         links: [
             {text: "Contact Me", url: "mailto:hello@example.com"},
             {text: "My Portfolio", url: "https://example.com"}
@@ -20,9 +31,28 @@ async function main() {
             email: 'demo@example.com',
             name: 'Demo User',
             slug: 'demo',
-            template: 'lumi',
-            content: JSON.stringify(sampleContent),
-            role: 'client'
+            role: 'client',
+            page: {
+                create: {
+                    template: 'lumi',
+                    content: JSON.stringify(sampleContent)
+                }
+            }
+        }
+    })
+
+    await prisma.user.create({
+        data: {
+            email: 'michel@example.com',
+            name: 'Michel User',
+            slug: 'michel',
+            role: 'client',
+            page: {
+                create: {
+                    template: 'noir',
+                    content: JSON.stringify(sampleContent)
+                }
+            }
         }
     })
 
@@ -31,9 +61,13 @@ async function main() {
             email: 'admin@enlix.com',
             name: 'Admin User',
             slug: 'admin-user',
-            template: 'noir',
-            content: JSON.stringify(sampleContent),
-            role: 'admin'
+            role: 'admin',
+            page: {
+                create: {
+                    template: 'noir',
+                    content: JSON.stringify(sampleContent)
+                }
+            }
         }
     })
 }
