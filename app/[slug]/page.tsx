@@ -2,22 +2,11 @@ import {getUserPageBySlug} from "@/lib/services/pages";
 import {getTemplateComponent} from '@/lib/getTemplateComponent'
 import SectionRenderer from "@/components/SectionRenderer";
 import {notFound} from 'next/navigation';
-
-
-interface PageProps {
-    params: { slug: string }
-}
-
-interface Section {
-    id: string;
-    enabled: boolean;
-    order: number;
-    type: string;
-    data: any;
-}
+import {Section, PageProps} from "@/types";
 
 export default async function PublicPage({params}: PageProps) {
-    const page = await getUserPageBySlug(params.slug);
+    const resolvedParams = await params;
+    const page = await getUserPageBySlug(resolvedParams.slug);
 
     if (!page) {
         notFound()
@@ -45,16 +34,17 @@ export default async function PublicPage({params}: PageProps) {
 }
 
 export async function generateMetadata({params}: PageProps) {
-    const page = await getUserPageBySlug(params.slug);
+    const resolvedParams = await params;
+    const page = await getUserPageBySlug(resolvedParams.slug);
 
     if (!page) return {title: 'Not Found'};
 
     const content = typeof page.content === 'string'
         ? JSON.parse(page.content || '{}')
-        : page.content;
+        : (page.content || {});
 
     return {
-        title: content.title || page.user.name,
-        description: content.subtitle || `${page.user.name}'s page`
+        title: content.title || 'Page',
+        description: content.subtitle || 'A user page',
     }
 }

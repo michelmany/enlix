@@ -20,10 +20,39 @@ async function main() {
                 }
             }
         ],
-        links: [
-            {text: "Contact Me", url: "mailto:hello@example.com"},
-            {text: "My Portfolio", url: "https://example.com"}
-        ]
+    }
+
+    const michelUserSampleContent = {
+        title: "Michel Moraes",
+        subtitle: "This is a sample subtitle",
+        description: "This is a sample description for the page content.",
+        image: "/placeholder.jpg",
+        sections: [
+            {
+                id: "section1",
+                type: "about",
+                enabled: true,
+                order: 1,
+                data: {
+                    title: "About Me",
+                    content: "This is some sample content about me."
+                }
+            },
+            {
+                id: "section2",
+                type: "links",
+                enabled: true,
+                order: 0,
+                data: {
+                    title: "Links",
+                    content: [
+                        {text: "Fale comigo pelo WhatsApp", url: "https://wa.me/1234567890"},
+                        {text: "Meu Portfólio", url: "https://michelmoraes.com"},
+                        {text: "Meu GitHub", url: "https://github.com/michelmany"}
+                    ]
+                }
+            }
+        ],
     }
 
     await prisma.user.create({
@@ -50,7 +79,7 @@ async function main() {
             page: {
                 create: {
                     template: 'noir',
-                    content: JSON.stringify(sampleContent)
+                    content: JSON.stringify(michelUserSampleContent)
                 }
             }
         }

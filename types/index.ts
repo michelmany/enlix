@@ -14,12 +14,15 @@ export interface User {
 
 export interface Page {
     id: string;
-    title: string;
     template: string;
     content: Record<string, any>;
     userId: string;
     customDomain?: string | null;
     hasCustomTemplate?: boolean;
+}
+
+export interface PageProps {
+    params: { slug: string }
 }
 
 export interface Template {

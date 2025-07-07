@@ -1,0 +1,23 @@
+.about-section {
+
+    // General styles for the lumi theme
+    &--lumi {
+
+        .about-content {
+            p {
+                color: blue;
+            }
+        }
+    }
+
+    // General styles for the noir theme
+    &--noir {
+
+        .about-content {
+            p {
+                color: red;
+            }
+        }
+    }
+}
+

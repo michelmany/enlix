@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import './AboutSection.scss';
 
 interface AboutSectionProps {
     data: {
@@ -14,7 +15,7 @@ interface AboutSectionProps {
 
 export default function AboutSection({data, template}: AboutSectionProps) {
     return (
-        <section className={`about-section about-section-${template}`}>
+        <section className={`about-section about-section--${template}`}>
             <div className="container mx-auto px-4 py-8">
                 <h2 className="text-2xl font-bold mb-6">{data.title || 'About Me'}</h2>
 
@@ -32,7 +33,7 @@ export default function AboutSection({data, template}: AboutSectionProps) {
                     <div className="about-content">
                         {data.content && (
                             <div className="mb-6">
-                                <p className="text-gray-700">{data.content}</p>
+                                <p>{data.content}</p>
                             </div>
                         )}
 
